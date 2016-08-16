@@ -1,0 +1,26 @@
+#!bash
+
+# alias vim="mvim -v"
+alias brewfix="brew update && brew cleanup && brew cask cleanup"
+alias clearDNS='sudo dscacheutil -flushcache'
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC -I ncurses'
+
+if  type gls > /dev/null ; then
+  eval "$(gdircolors -b $HOME/.dircolors)"
+  alias ls="gls --color=auto"
+fi
+
+trash() {
+    mv $1 ~/.Trash/
+}
+
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+
+# osx setup commands. This needs to be finished still
+# less mouse scrolling in iterm2
+#defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
+# caps lock remapped to left control
+# check keyboard values with 'ioreg -p IOUSB -c IOUSBDevice | grep -e class -e idVendor -e idProduct'
+#defaults -currentHost write -g com.apple.keyboard.modifiermapping.1542-610-0 -array-add '<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>'
+

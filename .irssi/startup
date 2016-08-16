@@ -1,0 +1,4 @@
+SCRIPT LOAD nicklist.pl
+NICKLIST FIFO
+
+SCRIPT LOAD xchatnickcolor.pl
