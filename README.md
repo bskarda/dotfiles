@@ -1,6 +1,6 @@
-```
-    git init --bare $HOME/.myconf
-    alias config='/usr/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
+```bash
+    git init --bare $HOME/.dotfiles
+    alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
     config config status.showUntrackedFiles no
 # Add files
     config status
@@ -10,8 +10,8 @@
     config commit -m "Add redshift config"
     config push
 # Clone
-    git clone --separate-git-dir=$HOME/.myconf /path/to/repo $HOME/myconf-tmp
-    cp ~/myconf-tmp/.gitmodules ~  # If you use Git submodules
-    rm -r ~/myconf-tmp/
-    alias config='/usr/bin/git --git-dir=$HOME/.myconf/ --work-tree=$HOME'
+    git clone --separate-git-dir=$HOME/.dotfiles /path/to/repo $HOME/dotfiles-tmp
+    cp ~/dotfiles-tmp/.gitmodules ~  # If you use Git submodules
+    rm -r ~/dotfiles-tmp/
+    alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 ```

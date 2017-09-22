@@ -5,12 +5,60 @@ alias ll="ls -lah"
 alias nh="tr \"\t\" \"\n\" | cat -n"
 alias g=hub
 alias lastten="history | tail"
-alias mdt="mvn dependency:tree"
-alias mdtv="mvn dependency:tree -Dverbose"
+alias mdt="color_maven dependency:tree"
+alias mdtv="color_maven dependency:tree -Dverbose"
+alias mcv="color_maven clean verify"
 alias mci="color_maven clean install"
 alias mcie="color_maven clean install -Dexhaustive"
 alias mcist="color_maven clean install -DskipTests"
 alias remove_trailing_whitepace="git ls-files | xargs perl -pi -e 's/ +$//'"
+
+export JVM_REMOTE_3333_ARGS='-Dcom.sun.management.jmxremote.port=3333 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
+
+docker_shell() {
+  docker exec -i -t $1 /bin/bash
+}
+
+docker_cleanup() {
+  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune
+}
+
+# fco - checkout git branch/tag
+fco() {
+  local tags branches target
+  tags=$(
+    git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+  branches=$(
+    git branch --all | grep -v HEAD             |
+    sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
+    sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+  target=$(
+    (echo "$tags"; echo "$branches") |
+    fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
+  git checkout $(echo "$target" | awk '{print $2}')
+}
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# Modified version where you can press
+#   - CTRL-O to open with `open` command,
+#   - CTRL-E or Enter key to open with the $EDITOR
+fo() {
+  local out file key
+  IFS=$'\n' out=($(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e))
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [ -n "$file" ]; then
+    [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
+  fi
+}
 
 function mvn_version_bump {
   mvn --batch-mode versions:set -DnewVersion="$1" -DgenerateBackupPoms=false
@@ -36,7 +84,7 @@ alias git=hub
 # Git dotfiles tracking. Run at laptop setup
 # git init --bare $HOME/.dotfiles
 # config config status.showUntrackedFiles no
-alias config='git --git-dir=$HOME/.dotfiles-git/ --work-tree=$HOME'
+alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 export PAGER=less
 export EDITOR=vim
@@ -179,7 +227,7 @@ if [[ -s ~/.git-prompt.sh ]]; then
         PROMPT_COMMAND='__git_ps1 "\u@\h:\w $(jobcount)[\$(~/.rvm/bin/rvm-prompt)]"  "\\n\$ " '
         #PS1='\u@\h:\w [$(~/.rvm/bin/rvm-prompt)] $(__scm_branch)  \n\$ '
     else
-        PROMPT_COMMAND='__git_ps1 "\u@\h:\w"  "\\n\$ " '
+        PROMPT_COMMAND='__git_ps1 "\u@\h:\w $(jobcount)"  "\\n\$ " '
     fi
 fi
 
@@ -234,7 +282,7 @@ shopt -s dirspell
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell
 # Allow you to cd to popular folders
-CDPATH=".:~/opower:~/source"
+CDPATH=".:~/source"
 
 # cdable_vars lets you run `cd var` and it will bring you into specified dir
 # Saving cdable_vars for when it's needed.
@@ -260,3 +308,10 @@ BASE16_SHELL="$HOME/.base16-eighties.dark.sh"
 for f in $HOME/.bskarda_extra_*; do source $f; done
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="/usr/local/opt/ab/bin:$PATH"
+
+#chefdk
+eval "$(chef shell-init bash)"
+PATH=/Users/b.skarda/.chefdk/gem/ruby/2.1.0/bin:$PATH

@@ -1,6 +1,6 @@
 [user]
 	name = Brian Skarda
-	email = brian.skarda@opower.com
+	email = b.skarda@cvent.com
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
@@ -34,7 +34,6 @@
 	log = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
 	show = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
 [alias]
-    clone = clone --origin upstream
     fetch = fetch --all
     remote = remote
     rv = remote --verbose
@@ -46,7 +45,6 @@
     ri = rebase --interactive
     ra  = rebase --abort
     rc  = rebase --continue
-    ru  = rebase -i upstream/master
 	b = branch -v
     mt = mergetool
     st = status
