@@ -55,6 +55,9 @@
     pbs = push brian-skarda
     pbsf = push brian-skarda -f
     graph = log --graph --pretty=oneline
+    personalprofile = config user.email "brian.skarda@gmail.com"
+    mergefix = "!f() { vim -p `git diff --name-only | sort | uniq`; }; f"
+    unmerged = branch --no-merged master
 [mergetool]
 	keepBackup = false
 [merge "ours"]

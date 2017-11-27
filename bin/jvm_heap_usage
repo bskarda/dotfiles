@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo -n 'Enter the jvm PID: '
+read jvm_pid
+
+sudo jstat -gc $jvm_pid | tail -1 | awk '{print ($3 + $4 + $6 + $8) / 1024 "mb"}'

@@ -19,29 +19,34 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "only install YCM if OS is OS X
-let os = substitute(system('uname'), "\n", "", "")
-if os == "Darwin"
-    Plugin 'Valloric/YouCompleteMe'
-endif
+"let os = substitute(system('uname'), \"\n", \"", \"")
+" TODO don't use YCM any more
+"if os == \"Darwin"
+"    Plugin 'Valloric/YouCompleteMe'
+"endif
 
 Plugin 'scrooloose/nerdtree' " sidebar file exploration
 Plugin 'jistr/vim-nerdtree-tabs' " Allow nerdtree between tabs
-Plugin 'kien/ctrlp.vim' " Fuzzy searching
+" Plugin 'kien/ctrlp.vim' " Fuzzy searching
+Plugin 'junegunn/fzf.vim'
 " Plugin 'ervandew/supertab'
-Plugin 'scrooloose/syntastic'
-Plugin 'majutsushi/tagbar' " side bar for displaying Ctags
+" Plugin 'scrooloose/syntastic'
+Plugin 'w0rp/ale'
+" Plugin 'majutsushi/tagbar' " side bar for displaying Ctags
 
 " language specific
-Plugin 'git://git.code.sf.net/p/vim-latex/vim-latex'
+Plugin 'sheerun/vim-polyglot' " replaces all language specifics
+"Plugin 'git://git.code.sf.net/p/vim-latex/vim-latex'
 "Plugin 'https://github.com/jnwhiteh/vim-golang'
-Plugin 'fatih/vim-go'
-Plugin 'pangloss/vim-javascript'
-Plugin 'chaquotay/ftl-vim-syntax'
-Plugin 'puppetlabs/puppet-syntax-vim'
+"Plugin 'fatih/vim-go'
+"Plugin 'pangloss/vim-javascript'
+"Plugin 'chaquotay/ftl-vim-syntax'
+"Plugin 'puppetlabs/puppet-syntax-vim'
 
 " git
 Plugin 'tpope/vim-fugitive' " Dependency for visual git + nice git bindings
 Plugin 'gregsexton/gitv' " visual git
+Plugin 'airblade/vim-gitgutter' " Line status in gutter
 
 " colors
 " Plugin 'fugalh/desert.vim'
@@ -97,6 +102,9 @@ filetype plugin indent on
 
 set statusline=%F[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
+" Faster updatetime to load git-gutter quickly
+set updatetime=250
+
 " augroup to prevent multiple autocmd definition from vimrc
 augroup vimrc
     autocmd!
@@ -133,8 +141,8 @@ let g:mapleader=","
 " Run this occasionally -> ctags -R -f ./.git/tags .
 " or ctags -R .
 "key bindings for ctags
-nnoremap <leader>b :TagbarToggle<CR>
-nnoremap <leader>. :CtrlPTag<CR>
+" nnoremap <leader>b :TagbarToggle<CR>
+" nnoremap <leader>. :CtrlPTag<CR>
 
 "Colors
 set background=dark
@@ -149,21 +157,24 @@ colorscheme base16-eighties
 set backspace=indent,eol,start
 
 " Enable tab completion from tag file
-let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:ycm_collect_identifiers_from_tags_files = 1
 
 " more natural splits
 set splitbelow
 set splitright
 
 " syntastic
-set statusline+=%#warningmsg#
+" set statusline+=%#warningmsg#
 " set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
+" FZF helper to transition from ctrl-p
+map <C-p> :Files<CR>
 
 " enable mouse resize within tmux
 " This breaks neovim
@@ -171,3 +182,6 @@ set ttymouse=xterm2
 
 " command history
 set history=10000
+
+" FZF
+set rtp+=/usr/local/opt/fzf

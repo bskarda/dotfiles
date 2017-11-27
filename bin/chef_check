@@ -3,7 +3,11 @@
 set -xeuo pipefail
 IFS=$'\n\t'
 
+chef exec rm -rf Berksfile.lock && \
+export SOLVE_TIMEOUT=1000 && \
+chef exec berks install --except=local && \
 chef exec foodcritic . && \
 chef exec cookstyle . && \
 chef exec rspec && \
+chef exec rm -rf .kitchen/ && \
 chef exec kitchen test all --destroy=always

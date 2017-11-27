@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo -n 'Password: '
+read -s PASSWORD
+echo
+
+# DEPLOY_TYPE=NewBatchAggregator
+DEPLOY_TYPE=NewPriorityConsumer
+DEPLOY_HOST=sg20-anadsc-003.core.cvent.org
+
+
+for f in \
+csn/csn_ad_click.yaml csn/search_landing.yaml dev_ops/service_portal_click.yaml dev_ops/service_portal_interact.yaml dev_ops/service_portal_view.yaml ess/email_action_fact.yaml ess/email_batch_fact.yaml ess/module_throughput.yaml event_calendar/page_load.yaml event_calendar/website_pageload.yaml express_events/event_launched.yaml express_events/event_wizard_complete.yaml reporting/raw_back.yaml samples/basic_sql.yaml \
+; do
+  echo $f && \
+  curl -X POST https://jenkins.core.cvent.org/view/Analytics/job/manage-analytics-aggregator/build \
+    --user $USER:$PASSWORD \
+    --data-urlencode json='{"parameter": [{"name":"ACTION_TYPE", "value": "createJobs"}, {"name":"DEPLOY_TYPE", "value": "'$DEPLOY_TYPE'"}, {"name":"ENVIRONMENT", "value": "staging"}, {"name":"CONFIG_FILE", "value": "'$f'"}, {"name":"DEPLOY_HOST", "value": "'$DEPLOY_HOST'"}, {"name":"DELETE_SERVICE_FILES", "value": false}, {"name":"DELETE_TABLES", "value": false}]}';
+done;
+
+# vim: set ft=sh

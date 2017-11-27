@@ -1,9 +1,13 @@
+# For debugging issues
+#set -x
+
 alias rcluster='ssh -l bskarda rlogin.cs.vt.edu'
 alias grep='grep --color=auto'
 alias l="ls -lh"
 alias ll="ls -lah"
 alias nh="tr \"\t\" \"\n\" | cat -n"
 alias g=hub
+alias ce='chef exec'
 alias lastten="history | tail"
 alias mdt="color_maven dependency:tree"
 alias mdtv="color_maven dependency:tree -Dverbose"
@@ -112,7 +116,7 @@ bind "set show-all-if-ambiguous on"
 # export DOCKER_HOST=tcp://
 
 # Was previously in .bashrc
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # TMUX
 #if which tmux >/dev/null 2>&1; then
@@ -198,18 +202,18 @@ while [[ "$dir" != "/" ]]; do
 done
 }
 
-function prompt {
-if [[ -s ~/.git-prompt.sh ]]; then
-    source ~/.git-prompt.sh
-    # TODO Use this in PS1/Prompt command
-    if [[ -s ~/.rvm/bin/rvm-prompt ]]; then
-        #PROMPT_COMMAND='__git_ps1 "\u@\h:\w [\$(~/.rvm/bin/rvm-prompt)]"  "\\n\$ " '
-        PS1='\u@\h:\w [$(~/.rvm/bin/rvm-prompt)] $(__scm_branch)  \n\$ '
-    else
-        PROMPT_COMMAND='__git_ps1 "\u@\h:\w"  "\\n\$ " '
-    fi
-fi
-}
+# function prompt {
+# if [[ -s ~/.git-prompt.sh ]]; then
+#     source ~/.git-prompt.sh
+#     # TODO Use this in PS1/Prompt command
+#     if [[ -s ~/.rvm/bin/rvm-prompt ]]; then
+#         #PROMPT_COMMAND='__git_ps1 "\u@\h:\w [\$(~/.rvm/bin/rvm-prompt)]"  "\\n\$ " '
+#         PS1='\u@\h:\w [$(~/.rvm/bin/rvm-prompt)] $(__scm_branch)  \n\$ '
+#     else
+#         PROMPT_COMMAND='__git_ps1 "\u@\h:\w"  "\\n\$ " '
+#     fi
+# fi
+# }
 
 function jobcount {
 local stopped=$(jobs -s | wc -l | tr -d " ")
@@ -289,7 +293,7 @@ CDPATH=".:~/source"
 #export documents="$HOME/Documents"
 #shopt -s cdable_vars
 
-source "$HOME/bin/tmuxinator.bash"
+# source "$HOME/bin/tmuxinator.bash"
 
 # OS specific configuration
 osname=`uname`
@@ -312,6 +316,16 @@ export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 export PATH="/usr/local/opt/ab/bin:$PATH"
 
+# homebrew rabbitmq
+export PATH="$PATH:/usr/local/sbin"
+
 #chefdk
 eval "$(chef shell-init bash)"
-PATH=/Users/b.skarda/.chefdk/gem/ruby/2.1.0/bin:$PATH
+
+# Rustup
+# export PATH="$HOME/.cargo/bin:$PATH"
+# source $HOME/.cargo/env
+
+# NVM
+# export NVM_DIR="$HOME/.nvm"
+# source# '/usr/local/opt/nvm/nvm.sh'
