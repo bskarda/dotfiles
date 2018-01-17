@@ -9,12 +9,12 @@ alias nh="tr \"\t\" \"\n\" | cat -n"
 alias g=hub
 alias ce='chef exec'
 alias lastten="history | tail"
-alias mdt="color_maven dependency:tree"
-alias mdtv="color_maven dependency:tree -Dverbose"
-alias mcv="color_maven clean verify"
-alias mci="color_maven clean install"
-alias mcie="color_maven clean install -Dexhaustive"
-alias mcist="color_maven clean install -DskipTests"
+alias mdt="mcv dependency:tree"
+alias mdtv="mvn dependency:tree -Dverbose"
+alias mcv="mvn clean verify"
+alias mci="mvn clean install"
+alias mcie="mvn clean install -Dexhaustive"
+alias mcist="mvn clean install -DskipTests"
 alias remove_trailing_whitepace="git ls-files | xargs perl -pi -e 's/ +$//'"
 
 export JVM_REMOTE_3333_ARGS='-Dcom.sun.management.jmxremote.port=3333 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
@@ -24,7 +24,7 @@ docker_shell() {
 }
 
 docker_cleanup() {
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune
+  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune | docker volumes prune
 }
 
 # fco - checkout git branch/tag
@@ -252,6 +252,7 @@ shopt -s cmdhist
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # Maven
+# TODO remove this now that maven 3.5.0+ has colors
 function color_maven() {
   # TODO centralize colors
   local BLUE="[0;34m"
@@ -273,7 +274,7 @@ function color_maven() {
     return $PIPESTATUS
 }
 
-alias mvn=color_maven
+#alias mvn=color_maven
 
 # .bashrc is empty
 #[[ -s ~/.bashrc ]] && source ~/.bashrc

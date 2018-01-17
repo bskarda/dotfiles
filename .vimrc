@@ -176,6 +176,13 @@ set splitright
 " FZF helper to transition from ctrl-p
 map <C-p> :Files<CR>
 
+" Enable markdown folding
+let g:markdown_folding = 1
+
+" Speed up git gutter
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
 " enable mouse resize within tmux
 " This breaks neovim
 set ttymouse=xterm2

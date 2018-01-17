@@ -6,7 +6,7 @@ IFS=$'\n\t'
 chef exec rm -rf Berksfile.lock && \
 export SOLVE_TIMEOUT=1000 && \
 chef exec berks install --except=local && \
-chef exec foodcritic . && \
+chef exec foodcritic --epic-fail correctness --tags ~solo --tags ~supermarket --tags ~FC066 . && \
 chef exec cookstyle . && \
 chef exec rspec && \
 chef exec rm -rf .kitchen/ && \

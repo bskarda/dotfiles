@@ -4,18 +4,19 @@ echo -n 'Password: '
 read -s PASSWORD
 echo
 
-# DEPLOY_TYPE=NewBatchAggregator
-DEPLOY_TYPE=NewPriorityConsumer
-DEPLOY_HOST=sg20-anadsc-003.core.cvent.org
+DEPLOY_TYPE=NewBatchAggregator
+# DEPLOY_TYPE=NewPriorityConsumer
+DEPLOY_HOST=pr50-anadsc-007.core.cvent.org
+ENVIRONMENT=pr50
 
 
 for f in \
-csn/csn_ad_click.yaml csn/search_landing.yaml dev_ops/service_portal_click.yaml dev_ops/service_portal_interact.yaml dev_ops/service_portal_view.yaml ess/email_action_fact.yaml ess/email_batch_fact.yaml ess/module_throughput.yaml event_calendar/page_load.yaml event_calendar/website_pageload.yaml express_events/event_launched.yaml express_events/event_wizard_complete.yaml reporting/raw_back.yaml samples/basic_sql.yaml \
+csn/agg_ad_cart_rfp.yaml csn/agg_ad_click_rfp.yaml csn/agg_ad_clicks.yaml csn/agg_ad_impressions.yaml csn/agg_add_session_funnel.yaml csn/agg_add_to_cart.yaml csn/agg_add_total_funnel.yaml csn/agg_all_session_funnel.yaml csn/agg_assoc_venues.yaml csn/agg_base_device_browser.yaml csn/agg_cart_search_rank.yaml csn/agg_land_session_funnel.yaml csn/agg_land_total_funnel.yaml csn/agg_landing_ad_impressions.yaml csn/agg_landing_page_report.yaml csn/agg_map_session_funnel.yaml csn/agg_map_total_funnel.yaml csn/agg_page_flow.yaml csn/agg_profile_session_funnel.yaml csn/agg_profile_total_funnel.yaml csn/agg_quote_session_funnel.yaml csn/agg_quote_total_funnel.yaml csn/agg_rfp_report.yaml csn/agg_rfp_session_funnel.yaml csn/agg_rfp_total_funnel.yaml csn/agg_search_map_funnel.yaml csn/agg_venue_search_rank.yaml \
 ; do
   echo $f && \
   curl -X POST https://jenkins.core.cvent.org/view/Analytics/job/manage-analytics-aggregator/build \
     --user $USER:$PASSWORD \
-    --data-urlencode json='{"parameter": [{"name":"ACTION_TYPE", "value": "createJobs"}, {"name":"DEPLOY_TYPE", "value": "'$DEPLOY_TYPE'"}, {"name":"ENVIRONMENT", "value": "staging"}, {"name":"CONFIG_FILE", "value": "'$f'"}, {"name":"DEPLOY_HOST", "value": "'$DEPLOY_HOST'"}, {"name":"DELETE_SERVICE_FILES", "value": false}, {"name":"DELETE_TABLES", "value": false}]}';
+    --data-urlencode json='{"parameter": [{"name":"ACTION_TYPE", "value": "createJobs"}, {"name":"DEPLOY_TYPE", "value": "'$DEPLOY_TYPE'"}, {"name":"ENVIRONMENT", "value": "'$ENVIRONMENT'"}, {"name":"CONFIG_FILE", "value": "'$f'"}, {"name":"DEPLOY_HOST", "value": "'$DEPLOY_HOST'"}, {"name":"DELETE_SERVICE_FILES", "value": false}, {"name":"DELETE_TABLES", "value": false}, {"name":"CONT_DELIV_UTIL_BRANCH", "value": "master"}]}';
 done;
 
 # vim: set ft=sh

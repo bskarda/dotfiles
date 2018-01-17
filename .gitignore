@@ -83,3 +83,11 @@ left
 open_source/
 right
 notes/
+.IdentityService/
+.mono/
+.pry_history
+.rnd
+.templateengine/
+aws_keys/
+logs/
+notebook/
