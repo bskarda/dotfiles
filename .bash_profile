@@ -24,7 +24,7 @@ docker_shell() {
 }
 
 docker_cleanup() {
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune | docker volumes prune
+  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune | docker volume prune
 }
 
 # fco - checkout git branch/tag
@@ -321,12 +321,14 @@ export PATH="/usr/local/opt/ab/bin:$PATH"
 export PATH="$PATH:/usr/local/sbin"
 
 #chefdk
-eval "$(chef shell-init bash)"
+# Disable these so you have to run them with `chef exec`.
+# Causes issues with homebrew and node (pkgconfig)
+#eval "$(chef shell-init bash)"
 
 # Rustup
 # export PATH="$HOME/.cargo/bin:$PATH"
 # source $HOME/.cargo/env
 
 # NVM
-# export NVM_DIR="$HOME/.nvm"
-# source# '/usr/local/opt/nvm/nvm.sh'
+export NVM_DIR="$HOME/.nvm"
+source '/usr/local/opt/nvm/nvm.sh'

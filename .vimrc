@@ -1,5 +1,8 @@
 set nocompatible
 
+" Swapfiles in one folder
+:set directory=$HOME/.vim/swapfiles//
+
 filetype off
 " Setting up Vundle - the vim plugin bundler
 " from

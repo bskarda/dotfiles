@@ -11,3 +11,4 @@ chef exec cookstyle . && \
 chef exec rspec && \
 chef exec rm -rf .kitchen/ && \
 chef exec kitchen test all --destroy=always
+#chef exec kitchen test all --destroy=always --concurrency 8
