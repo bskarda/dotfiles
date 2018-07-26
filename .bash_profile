@@ -1,6 +1,5 @@
 # For debugging issues
 #set -x
-
 alias rcluster='ssh -l bskarda rlogin.cs.vt.edu'
 alias grep='grep --color=auto'
 alias l="ls -lh"
@@ -332,3 +331,13 @@ export PATH="$PATH:/usr/local/sbin"
 # NVM
 export NVM_DIR="$HOME/.nvm"
 source '/usr/local/opt/nvm/nvm.sh'
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+  [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+  eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+base16_tomorrow-night
+
+CLI_COLORS=1
