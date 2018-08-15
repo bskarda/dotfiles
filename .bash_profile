@@ -15,6 +15,7 @@ alias mci="mvn clean install"
 alias mcie="mvn clean install -Dexhaustive"
 alias mcist="mvn clean install -DskipTests"
 alias remove_trailing_whitepace="git ls-files | xargs perl -pi -e 's/ +$//'"
+alias agi='ag --path-to-ignore ~/.ignore'
 
 export JVM_REMOTE_3333_ARGS='-Dcom.sun.management.jmxremote.port=3333 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
 
@@ -341,3 +342,5 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 base16_tomorrow-night
 
 CLI_COLORS=1
+
+export PATH="$PATH:/usr/local/bin/cvent-aws-cli"
