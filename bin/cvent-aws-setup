@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Password setup instructions
+# https://github.com/oktadeveloper/okta-aws-cli-assume-role/blob/master/docs/OKTA_PASSWORD_CMD.md#example-macos-keychain
+
+# Grab the role ARN from the cvent-management account for the role you want to use
+
+# Run this nightly by doing
+# crontab -e
+# and appending a line like
+# 0 8 * * * bin/cvent-aws-setup > /tmp/aws_output.log 2>&1
+
+# make sure the cli is on the path. Cron runs with a limited path since it doesn't load your profile
+PATH="$PATH:/usr/local/bin/cvent-aws-cli" \
+OKTA_USERNAME="$USER" \
+OKTA_PASSWORD=$(security find-generic-password -a "$OKTA_USERNAME" -s okta-aws-cli -w) \
+OKTA_AWS_ROLE_TO_ASSUME='arn:aws:iam::667621734181:role/aws-cvt-devops' \
+cvent-aws-cli

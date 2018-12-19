@@ -1,0 +1,19 @@
+#!/usr/bin/env jq -cf
+
+# From https://stackoverflow.com/questions/44526740/how-to-trim-white-space-for-every-element-in-jq?rq=1
+
+# Define walk function (standard library only for jq 1.6 and newer, currently unreleased)
+def walk(f):
+  . as $in
+  | if type == "object" then
+      reduce keys_unsorted[] as $key
+        ( {}; . + { ($key):  ($in[$key] | walk(f)) } ) | f
+  elif type == "array" then map( walk(f) ) | f
+  else f
+  end;
+
+walk(
+  if type == "string" then
+    (sub("^[[:space:]]+"; "") | sub("[[:space:]]+$"; ""))
+  else . end
+)
