@@ -10,7 +10,7 @@
     config commit -m "Add redshift config"
     config push
 # Clone
-    git clone --separate-git-dir=$HOME/.dotfiles /path/to/repo $HOME/dotfiles-tmp
+    git clone --separate-git-dir=$HOME/.dotfiles git@github.com:bskarda/dotfiles.git $HOME/dotfiles-tmp
     cp ~/dotfiles-tmp/.gitmodules ~  # If you use Git submodules
     rm -r ~/dotfiles-tmp/
     alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
