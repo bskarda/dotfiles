@@ -1,11 +1,12 @@
 # For debugging issues
 #set -x
+
 alias rcluster='ssh -l bskarda rlogin.cs.vt.edu'
 alias grep='grep --color=auto'
-alias l="ls -lh"
-alias ll="ls -lah"
+alias l="exa -lh"
+alias ll="exa -lah"
 alias nh="tr \"\t\" \"\n\" | cat -n"
-alias g=hub
+alias g=git
 alias ce='chef exec'
 alias lastten="history | tail"
 alias mdt="mcv dependency:tree"
@@ -16,15 +17,28 @@ alias mcie="mvn clean install -Dexhaustive"
 alias mcist="mvn clean install -DskipTests"
 alias remove_trailing_whitepace="git ls-files | xargs perl -pi -e 's/ +$//'"
 alias agi='ag --path-to-ignore ~/.ignore'
+alias largest_files="du -cksh * | sort -rh | head"
+alias p=pnpm
+alias root='cd $(git rev-parse --show-toplevel)'
 
+large_files() {
+  du -sh "$@" | sort -hr | head
+}
+
+mbo() {
+  # just put release and shade in here so we always build a shaded jar no matter where we are
+  mvn clean verify -pl "$1" -am -Prelease,shade
+}
+
+export GPG_TTY=$(tty)
 export JVM_REMOTE_3333_ARGS='-Dcom.sun.management.jmxremote.port=3333 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
 
 docker_shell() {
   docker exec -i -t $1 /bin/bash
 }
 
-docker_cleanup() {
-  docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q) && yes | docker network prune | docker volume prune
+chime() {
+  say -v Yuri "done"
 }
 
 # fco - checkout git branch/tag
@@ -74,7 +88,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 # Autocomplete for 'g' as well
-complete -o default -o nospace -F _git g
+complete -o default -o nospace -F __git_wrap__git_main g
 
 # Update window size after every command
 shopt -s checkwinsize
@@ -82,7 +96,7 @@ shopt -s checkwinsize
 # Turn on globstar **
 shopt -s globstar
 
-alias git=hub
+#alias git=hub
 # alias vim=nvim
 
 # Git dotfiles tracking. Run at laptop setup
@@ -94,11 +108,6 @@ export PAGER=less
 export EDITOR=vim
 
 export PATH=/usr/local/bin:/opt/local/bin:/opt/local/sbin:~/bin:$PATH
-
-export ECLIPSE_HOME=/opt/homebrew-cask/Caskroom/eclipse-java/4.5.2/Eclipse.app/Contents/Eclipse
-
-export GOPATH=~/src/go
-export PATH=~/src/go/bin:$PATH
 
 export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWCOLORHINTS=true
@@ -129,42 +138,42 @@ bind "set show-all-if-ambiguous on"
 #    done
 #fi
 
-if [[ -s ~/.git-completion.bash ]]; then
-    source ~/.git-completion.bash
-fi
+#if [[ -s ~/.git-completion.bash ]]; then
+#    source ~/.git-completion.bash
+#fi
 
-# This stuff will give you a fancy-dancy prompt that includes the
-# svn/git trunk/tags/branches part of the URL in it so you will always know
-# where you are working in Subversion or Git.
-PROMPT_NO_COLOR="\[\033[0m\]"
-PROMPT_BLACK="\[\033[1;30m\]"
-PROMPT_BOLD_RED="\[\033[1;31m\]"
-PROMPT_BOLD_GREEN="\[\033[1;32m\]"
-PROMPT_BOLD_YELLOW="\[\033[1;33m\]"
-PROMPT_BOLD_CYAN="\[\033[1;34m\]"
-PROMPT_BOLD_MAGENTA="\[\033[1;35m\]"
-PROMPT_BOLD_GREY="\[\033[1;36m\]"
-PROMPT_BOLD_WHITE="\[\033[1;37m\]"
-PROMPT_RED="\[\033[0;31m\]"
-PROMPT_GREEN="\[\033[0;32m\]"
-PROMPT_YELLOW="\[\033[0;33m\]"
-PROMPT_CYAN="\[\033[0;34m\]"
-PROMPT_MAGENTA="\[\033[0;35m\]"
-PROMPT_TEAL="\[\033[0;36m\]"
-PROMPT_WHITE="\[\033[0;37m\]"
-
-# Default SVN and Git colors
-SVN_TRUNK_COLOR_DEFAULT=$PROMPT_YELLOW
-SVN_BRANCH_COLOR_DEFAULT=$PROMPT_GREEN
-GIT_MASTER_COLOR_DEFAULT=$PROMPT_YELLOW
-GIT_BRANCH_COLOR_DEFAULT=$PROMPT_GREEN
-
-# Set SVN and Git colors if not already set
-# To set you own SVN_TRUNK_COLOR, define SVN_TRUNK_COLOR before sourcing pose.bash
-SVN_TRUNK_COLOR=${SVN_TRUNK_COLOR:-$SVN_TRUNK_COLOR_DEFAULT}
-SVN_BRANCH_COLOR=${SVN_BRANCH_COLOR:-$SVN_BRANCH_COLOR_DEFAULT}
-GIT_MASTER_COLOR=${GIT_MASTER_COLOR:-$GIT_MASTER_COLOR_DEFAULT}
-GIT_BRANCH_COLOR=${GIT_BRANCH_COLOR:-$GIT_BRANCH_COLOR_DEFAULT}
+## This stuff will give you a fancy-dancy prompt that includes the
+## svn/git trunk/tags/branches part of the URL in it so you will always know
+## where you are working in Subversion or Git.
+#PROMPT_NO_COLOR="\[\033[0m\]"
+#PROMPT_BLACK="\[\033[1;30m\]"
+#PROMPT_BOLD_RED="\[\033[1;31m\]"
+#PROMPT_BOLD_GREEN="\[\033[1;32m\]"
+#PROMPT_BOLD_YELLOW="\[\033[1;33m\]"
+#PROMPT_BOLD_CYAN="\[\033[1;34m\]"
+#PROMPT_BOLD_MAGENTA="\[\033[1;35m\]"
+#PROMPT_BOLD_GREY="\[\033[1;36m\]"
+#PROMPT_BOLD_WHITE="\[\033[1;37m\]"
+#PROMPT_RED="\[\033[0;31m\]"
+#PROMPT_GREEN="\[\033[0;32m\]"
+#PROMPT_YELLOW="\[\033[0;33m\]"
+#PROMPT_CYAN="\[\033[0;34m\]"
+#PROMPT_MAGENTA="\[\033[0;35m\]"
+#PROMPT_TEAL="\[\033[0;36m\]"
+#PROMPT_WHITE="\[\033[0;37m\]"
+#
+## Default SVN and Git colors
+#SVN_TRUNK_COLOR_DEFAULT=$PROMPT_YELLOW
+#SVN_BRANCH_COLOR_DEFAULT=$PROMPT_GREEN
+#GIT_MASTER_COLOR_DEFAULT=$PROMPT_YELLOW
+#GIT_BRANCH_COLOR_DEFAULT=$PROMPT_GREEN
+#
+## Set SVN and Git colors if not already set
+## To set you own SVN_TRUNK_COLOR, define SVN_TRUNK_COLOR before sourcing pose.bash
+#SVN_TRUNK_COLOR=${SVN_TRUNK_COLOR:-$SVN_TRUNK_COLOR_DEFAULT}
+#SVN_BRANCH_COLOR=${SVN_BRANCH_COLOR:-$SVN_BRANCH_COLOR_DEFAULT}
+#GIT_MASTER_COLOR=${GIT_MASTER_COLOR:-$GIT_MASTER_COLOR_DEFAULT}
+#GIT_BRANCH_COLOR=${GIT_BRANCH_COLOR:-$GIT_BRANCH_COLOR_DEFAULT}
 
 # check if the current directory is the root of a git repo and fetch
 function git_fetch_from_root {
@@ -226,13 +235,7 @@ fi
 
 if [[ -s ~/.git-prompt.sh ]]; then
     source ~/.git-prompt.sh
-    # TODO Use this in PS1/Prompt command
-    if [[ -s ~/.rvm/bin/rvm-prompt ]]; then
-        PROMPT_COMMAND='__git_ps1 "\u@\h:\w $(jobcount)[\$(~/.rvm/bin/rvm-prompt)]"  "\\n\$ " '
-        #PS1='\u@\h:\w [$(~/.rvm/bin/rvm-prompt)] $(__scm_branch)  \n\$ '
-    else
-        PROMPT_COMMAND='__git_ps1 "\u@\h:\w $(jobcount)"  "\\n\$ " '
-    fi
+    PROMPT_COMMAND='__git_ps1 "\u@\h:\w $(jobcount)"  "\\n\$ " '
 fi
 
 #Set up history. Must be after Prompt is set
@@ -251,30 +254,6 @@ shopt -s cmdhist
 # Save and reload the history after each command finishes
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-# Maven
-# TODO remove this now that maven 3.5.0+ has colors
-function color_maven() {
-  # TODO centralize colors
-  local BLUE="[0;34m"
-  local RED="[0;31m"
-  local LIGHT_RED="[1;31m"
-  local LIGHT_GRAY="[0;37m"
-  local LIGHT_GREEN="[1;32m"
-  local LIGHT_BLUE="[1;34m"
-  local LIGHT_CYAN="[1;36m"
-  local YELLOW="[1;33m"
-  local WHITE="[1;37m"
-  local NO_COLOUR="[0m"
-  mvn "$@" | sed \
-    -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${LIGHT_GREEN}Tests run: \1$NO_COLOUR, Failures: $RED\2$NO_COLOUR, Errors: $YELLOW\3$NO_COLOUR, Skipped: $LIGHT_BLUE\4$NO_COLOUR/g" \
-    -e "s/\(\[\{0,1\}WARN\(ING\)\{0,1\}\]\{0,1\}.*\)/$YELLOW\1$NO_COLOUR/g" \
-    -e "s/\(\[ERROR\].*\)/$RED\1$NO_COLOUR/g" \
-    -e "s/\(\(BUILD \)\{0,1\}FAILURE.*\)/$RED\1$NO_COLOUR/g" \
-    -e "s/\(\(BUILD \)\{0,1\}SUCCESS.*\)/$LIGHT_GREEN\1$NO_COLOUR/g"
-    return $PIPESTATUS
-}
-
-#alias mvn=color_maven
 
 # .bashrc is empty
 #[[ -s ~/.bashrc ]] && source ~/.bashrc
@@ -287,7 +266,7 @@ shopt -s dirspell
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell
 # Allow you to cd to popular folders
-CDPATH=".:~/source"
+CDPATH=".:~/source:./packages"
 
 # cdable_vars lets you run `cd var` and it will bring you into specified dir
 # Saving cdable_vars for when it's needed.
@@ -304,18 +283,19 @@ elif [[ "$osname" == "Linux" ]]; then
     source "$HOME/.dotfiles_linux"
 fi
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.base16-eighties.dark.sh"
-[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-
 # source all files that start with .bskarda_extra_
 # this allows for custom configuration
 for f in $HOME/.bskarda_extra_*; do source $f; done
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-export PATH="/usr/local/opt/ab/bin:$PATH"
+# PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+# export PATH="$HOME/.jenv/bin:$PATH"
+# eval "$(jenv init -)"
+# export PATH="/usr/local/opt/ab/bin:$PATH"
+
+# asdf instead of all version managers
+. $(brew --prefix asdf)/asdf.sh
+. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
+. ~/.asdf/plugins/java/set-java-home.bash
 
 # homebrew rabbitmq
 export PATH="$PATH:/usr/local/sbin"
@@ -330,17 +310,65 @@ export PATH="$PATH:/usr/local/sbin"
 # source $HOME/.cargo/env
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
-source '/usr/local/opt/nvm/nvm.sh'
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+#[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# Old Base16 Shell
+# BASE16_SHELL="$HOME/.base16-eighties.dark.sh"
+# [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
 # Base16 Shell
+# Variation on https://github.com/chriskempson/base16-shell#bashzsh
 BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-  [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-  eval "$("$BASE16_SHELL/profile_helper.sh")"
+function base_16_setup() {
+  [ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+    eval "$("$BASE16_SHELL/profile_helper.sh")"
+}
+if [[ -s $BASE16_SHELL ]]; then
+  base_16_setup
+else
+  git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+  base_16_setup
+  # run base16_eighties on first setup
+fi
 
-base16_tomorrow-night
+# Create a new directory and enter it
+mkd() {
+  mkdir -p "$@"
+  cd "$@" || exit
+}
 
-CLI_COLORS=1
+# Make a temporary directory and enter it
+tmpd() {
+  local dir
+  if [ $# -eq 0 ]; then
+    dir=$(mktemp -d)
+  else
+    dir=$(mktemp -d -t "${1}.XXXXXXXXXX")
+  fi
+  cd "$dir" || exit
+}
 
-export PATH="$PATH:/usr/local/bin/cvent-aws-cli"
+# TODO remove this if it's not used
+#export CLI_COLORS=1
+#export CLICOLOR=1
+
+#pyenv
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init -)"
+
+
+#export PATH="$HOME/.poetry/bin:$PATH"
+#export PS1="\u@\h\[$(tput sgr0)\]"
+
+#test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# tabtab source for packages
+# uninstall by removing these lines
+#[ -f ~/.config/tabtab/bash/__tabtab.bash ] && . ~/.config/tabtab/bash/__tabtab.bash || true
+

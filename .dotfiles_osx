@@ -1,7 +1,7 @@
 #!bash
 
 # alias vim="mvim -v"
-alias brewfix="brew update && brew cleanup && brew cask cleanup"
+alias brewfix="brew update && brew cleanup"
 alias clearDNS='sudo dscacheutil -flushcache'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC -I ncurses'
 

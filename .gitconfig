@@ -1,10 +1,15 @@
 [user]
 	name = Brian Skarda
 	email = b.skarda@cvent.com
+	signingKey = 5E1F801A099C9E2E
+[credential "https://git-codecommit.us-east-1.amazonaws.com"]
+    helper = !aws --profile cvent-sandbox --region us-east-1 codecommit credential-helper $@
+    UseHttpPath = true
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
+	commitGraph = true
 [merge]
 	tool = kdiff3
 [diff]
@@ -34,6 +39,7 @@
 	log = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
 	show = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
 [alias]
+    l = log --stat
     fetch = fetch --all
     remote = remote
     rv = remote --verbose
@@ -45,7 +51,7 @@
     ri = rebase --interactive
     ra  = rebase --abort
     rc  = rebase --continue
-	b = branch -v
+    b = branch -v
     mt = mergetool
     st = status
     co = checkout
@@ -54,10 +60,12 @@
     pof = push origin -f
     pbs = push brian-skarda
     pbsf = push brian-skarda -f
-    graph = log --graph --pretty=oneline
+    graph =  log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
     personalprofile = config user.email "brian.skarda@gmail.com"
-    mergefix = "!f() { vim -p `git diff --name-only | sort | uniq`; }; f"
+    edit-unmerged = "!f() { vim -p `git diff --name-only | sort | uniq`; }; f"
     unmerged = branch --no-merged master
+    latest-tag = describe --tags --abbrev=0
+    recent-branches = branch --sort=-committerdate
 [mergetool]
 	keepBackup = false
 [merge "ours"]
@@ -66,3 +74,12 @@
 	pushdefault = origin
 [rebase]
 	autoStash = true
+[gc]
+	writeCommitGraph = true
+[pull]
+	ff = only
+[commit]
+	gpgSign = true
+	gpgsign = true
+[init]
+	defaultBranch = master
