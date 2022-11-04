@@ -35,9 +35,9 @@
 [hub]
 	host = github.va.opower.it
 [pager]
-	diff = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
-	log = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
-	show = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+	diff = "! $(brew --prefix)/share/git-core/contrib/diff-highlight/diff-highlight | less"
+	log = "! $(brew --prefix)/share/git-core/contrib/diff-highlight/diff-highlight | less"
+	show = "! $(brew --prefix)/share/git-core/contrib/diff-highlight/diff-highlight | less"
 [alias]
     l = log --stat
     fetch = fetch --all
@@ -83,3 +83,8 @@
 	gpgsign = true
 [init]
 	defaultBranch = master
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

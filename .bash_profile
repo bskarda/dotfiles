@@ -83,6 +83,8 @@ function mvn_version_bump {
 }
 
 # bash completion
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
 fi
@@ -106,8 +108,6 @@ alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 export PAGER=less
 export EDITOR=vim
-
-export PATH=/usr/local/bin:/opt/local/bin:/opt/local/sbin:~/bin:$PATH
 
 export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWCOLORHINTS=true
@@ -293,6 +293,7 @@ for f in $HOME/.bskarda_extra_*; do source $f; done
 # export PATH="/usr/local/opt/ab/bin:$PATH"
 
 # asdf instead of all version managers
+. $(brew --prefix asdf)/libexec/asdf.sh
 . $(brew --prefix asdf)/asdf.sh
 . $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
 . ~/.asdf/plugins/java/set-java-home.bash
@@ -372,3 +373,4 @@ tmpd() {
 # uninstall by removing these lines
 #[ -f ~/.config/tabtab/bash/__tabtab.bash ] && . ~/.config/tabtab/bash/__tabtab.bash || true
 
+export PATH="/opt/homebrew/sbin:$PATH"

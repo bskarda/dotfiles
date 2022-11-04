@@ -20,4 +20,6 @@
     git clone --separate-git-dir=$HOME/.dotfiles git@github.com:bskarda/dotfiles.git $HOME/dotfiles-tmp
     rm -r ~/dotfiles-tmp/
     alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+    config checkout master
+    config reset --hard master
 ```
